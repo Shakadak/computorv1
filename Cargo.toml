@@ -1,0 +1,4 @@
+[package]
+name = "computorv1"
+version = "0.1.0"
+authors = ["shakadak <nathanael.pineau@gmail.com>"]
