@@ -1,4 +1,6 @@
-pub fn lit(c: char) -> Box<Fn(&mut String) -> Result<char, String>> {
+pub type F = Box<Fn(&mut String) -> Result<char, String>>;
+
+pub fn lit(c: char) -> F {
     Box::new( move
         |input: &mut String| {
             if input.starts_with(c) {
@@ -6,3 +8,12 @@ pub fn lit(c: char) -> Box<Fn(&mut String) -> Result<char, String>> {
                 Ok(c)}
             else {
                 Err(format!("Error, expected '{}' instead of {}.", c, input.chars().nth(0).unwrap()))}})}
+
+pub fn or(lhs: F, rhs: F) -> F {
+    Box::new( move
+        |input: &mut String| {
+            match lhs(input) {
+                Ok(c)
+                    => Ok(c),
+                _
+                    => rhs(input)}})}
