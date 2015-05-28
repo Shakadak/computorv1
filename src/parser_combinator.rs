@@ -22,10 +22,11 @@ pub fn and(lhs: F, rhs: F) -> F {
     Box::new( move
         |input: &mut String| {
             match lhs(input) {
-                Ok(cl)
+                Ok(mut cl)
                     => match rhs(input) {
                         Ok(cr)
-                            => Ok(cl.push_str(cr[0..cr.len()])),
+                            => {cl.push_str(&cr[0..cr.len()]);
+                                Ok(cl)},
                         Err(s)
                             => {/*input.rewind_by(1);*/
                             Err(s)}},
