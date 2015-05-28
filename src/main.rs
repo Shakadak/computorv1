@@ -17,8 +17,8 @@ fn main() {
     match x {
         Number(Digit(num), _)
             => println!("{}", num)}
-    let parser = or(lit('A'), lit('y'));
+    let parser = or(lit('A'), lit('t'));
     let mut s = "Aytek".to_string();
-    println!("{:?}", parser(&mut s));
+    println!("{:?}", parser(&mut s).unwrap());
 //    s.remove(0);
-    println!("{:?}", parser(&mut s));}
+    println!("{:?}", parser(&mut s).err().unwrap());}
