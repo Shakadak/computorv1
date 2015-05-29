@@ -3,9 +3,7 @@ mod parser_combinator;
 
 use std::env;
 use parser_combinator::{
-    and,
-    lit,
-    or};
+    lit};
 use syntax::{
     Digit,
     Number};
@@ -18,6 +16,9 @@ fn main() {
     match x {
         Number(Digit(num), _)
             => println!("{}", num)}
-    let parser = or(lit('A'), or(lit('t'), lit('y')));
-    let mut s = "Aytek".to_string();
-    println!("{:?}", parser(&mut s).unwrap());
+    let parser = lit('A');
+    let s = "Aytek".to_string();
+    let mut i = s.chars().peekable();
+ //   i.next();
+//    println!("{:?}", parser(&mut i));
+    println!("{:?}", i.nth(1));}
