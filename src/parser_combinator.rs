@@ -47,6 +47,7 @@ impl Parser {
                             Ok(cl)},
                         Err(s) => Err(s)},
                     Err(s) => Err(s)}}))}
+
     pub fn digit() -> Parser {
         Parser::new(Box::new(move
             |input: &mut I| {
@@ -59,4 +60,16 @@ impl Parser {
                         => Err(format!("Error, expected {} instead of {}.", "a digit", c)),
                         true
                         => Ok(c.to_string())}}}))}
+
+    pub fn skip_whitespace() -> Parser {
+        Parser::new(Box::new(move
+            |input: &mut I| {
+                loop {
+                    match input.peek() {
+                        Some(c) if c.is_whitespace()
+                        => {},
+                        _
+                        => break}
+                    input.next();}
+                Ok(String::new())}))}
 }
