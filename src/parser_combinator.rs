@@ -23,9 +23,9 @@ impl Parser {
                             input.next();
                             Ok(peeked.to_string())}
                         else {
-                            Err(format!("Error, expected {} instead of {}.", c, peeked))}}
+                            Err(format!("Error, expected '{}' instead of '{}'.", c, peeked))}}
                     None
-                    => Err(format!("Error, expected {} instead of {}.", c, "nothing"))}}))}
+                    => Err(format!("Error, expected '{}' instead of '{}'.", c, "nothing"))}}))}
 
     pub fn or(self, rhs: Parser) -> Parser {
         Parser::new(Box::new(move
@@ -53,23 +53,23 @@ impl Parser {
             |input: &mut I| {
                 match input.peek() {
                     None
-                    => Err(format!("Error, expected {} instead of {}.", "a digit", "nothing")),
-                    Some(c)
+                    => Err(format!("Error, expected '{}' instead of '{}'.", "a digit", "nothing")),
+                    Some(&c)
                     => match c.is_digit(10) {
                         false
-                        => Err(format!("Error, expected {} instead of {}.", "a digit", c)),
+                        => Err(format!("Error, expected '{}' instead of '{}'.", "a digit", c)),
                         true
-                        => Ok(c.to_string())}}}))}
+                        => {input.next();
+                            Ok(c.to_string())}}}}))}
 
     pub fn skip_whitespace() -> Parser {
         Parser::new(Box::new(move
             |input: &mut I| {
                 loop {
                     match input.peek() {
-                        Some(c) if c.is_whitespace()
-                        => {},
+                        Some(&c) if c.is_whitespace()
+                        => {input.next();},
                         _
-                        => break}
-                    input.next();}
+                        => break}}
                 Ok(String::new())}))}
 }

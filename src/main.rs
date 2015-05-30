@@ -19,9 +19,9 @@ fn main() {
     let parse_ua = Parser::literal('A');
     let parse_y = Parser::literal('y');
     let parser = parse_ua.and(parse_y);
-    let s = "Aytek".to_string();
+    let s = "  1 Aytek".to_string();
     let mut i = s.chars().peekable();
-    i.next();
+    println!("{:?}", Parser::skip_whitespace().and(Parser::digit()).parse(&mut i));
     println!("{:?}", parser.parse(&mut i));
     println!("{:?}", i.nth(1));
     println!("{:?}", i.peek());
