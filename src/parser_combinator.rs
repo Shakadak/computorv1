@@ -47,4 +47,16 @@ impl Parser {
                             Ok(cl)},
                         Err(s) => Err(s)},
                     Err(s) => Err(s)}}))}
+    pub fn digit() -> Parser {
+        Parser::new(Box::new(move
+            |input: &mut I| {
+                match input.peek() {
+                    None
+                    => Err(format!("Error, expected {} instead of {}.", "a digit", "nothing")),
+                    Some(c)
+                    => match c.is_digit(10) {
+                        false
+                        => Err(format!("Error, expected {} instead of {}.", "a digit", c)),
+                        true
+                        => Ok(c.to_string())}}}))}
 }
