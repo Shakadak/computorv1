@@ -80,4 +80,19 @@ impl Parser {
                 if let Ok(tok) = (p.f)(input) {
                     s.push_str(&tok);}
                 Ok(s)}))}
+
+    pub fn repeat(p: Parser) -> Parser {
+        Parser::new(Box::new(move
+            |input: &mut I| {
+                let mut s = String::new();
+                loop {
+                    match (p.f)(input) {
+                        Ok(tok)
+                        => {s.push_str(&tok);}
+                        _
+                        => break}}
+                Ok(s)}))}
+
+    pub fn repeat1(p: Parser) -> Parser {
+        p.and(Parser::repeat(p))}
 }
