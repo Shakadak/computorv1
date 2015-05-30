@@ -72,4 +72,12 @@ impl Parser {
                         _
                         => break}}
                 Ok(String::new())}))}
+
+    pub fn option(p: Parser) -> Parser {
+        Parser::new(Box::new(move
+            |input: &mut I| {
+                let mut s = String::new();
+                if let Ok(tok) = (p.f)(input) {
+                    s.push_str(&tok);}
+                Ok(s)}))}
 }
