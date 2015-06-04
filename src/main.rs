@@ -18,12 +18,27 @@ fn main() {
             => println!("{}", num)}
     let parse_ua = Parser::literal('A');
     let parse_y = Parser::literal('y');
-    let parser = parse_ua.and(parse_y);
-    let parser2 = parser.f.clone();
+//    let parser = parse_ua.or(parse_y);
+//    let parser2 = parser.f.clone();
     let s = "    Aytek".to_string();
     let mut i = s.chars().peekable();
-    println!("{:?}", Parser::skip_whitespace().and(Parser::option(Parser::digit())).and(Parser::skip_whitespace()).parse(&mut i));
-    println!("{:?}", parser.parse(&mut i));
+    println!("{:?}", Parser::skip_whitespace()/*.and(Parser::option(Parser::digit())).and(Parser::skip_whitespace())*/.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+    println!("{:?}", &parse_ua.parse(&mut i));
+//    println!("{:?}", parser.parse(&mut i));
+//    println!("{:?}", parser.parse(&mut i));
     println!("{:?}", i.nth(1));
     println!("{:?}", i.peek());
-    println!("{:?}", vec![1, 2, 3]);}
+    println!("{:?}", vec![1, 2, 3]);
+    let a = Box::new(test);
+    let b = &a;
+    a();
+    b();
+}
+
+fn test() {
+    println!("Hello from a closure !");}

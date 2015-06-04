@@ -1,4 +1,5 @@
 use std::str;
+use std::rc::Rc;
 use std::iter;
 
 pub type I<'a> = iter::Peekable<str::Chars<'a>>;
@@ -11,7 +12,7 @@ impl Parser {
     pub fn new(func: F) -> Parser {
         Parser {f: func}}
 
-    pub fn parse(self, input: &mut I) -> Result<String, String> {
+    pub fn parse(&self, input: &mut I) -> Result<String, String> {
         (self.f)(input)}
 
     pub fn literal(c: char) -> Parser {
@@ -25,7 +26,7 @@ impl Parser {
                         else {
                             Err(format!("Error, expected '{}' instead of '{}'.", c, peeked))}}
                     None
-                    => Err(format!("Error, expected '{}' instead of '{}'.", c, "nothing"))}}))}
+                    => Err(format!("Error, expected '{}' instead of '{}'.", c, "nothing"))}}))}/*
 
     pub fn or(self, rhs: Parser) -> Parser {
         Parser::new(Box::new(move
@@ -34,7 +35,7 @@ impl Parser {
                     Ok(c) => Ok(c),
                     _ => (rhs.f)(input)}}))}
 
-    pub fn and(self, rhs: Parser) -> Parser {
+    pub fn and(&self, rhs: Parser) -> Parser {
         Parser::new(Box::new(move
             |input: &mut I| {
                 let mut dup = input.clone();
@@ -60,7 +61,7 @@ impl Parser {
                         => Err(format!("Error, expected '{}' instead of '{}'.", "a digit", c)),
                         true
                         => {input.next();
-                            Ok(c.to_string())}}}}))}
+                            Ok(c.to_string())}}}}))}*/
 
     pub fn skip_whitespace() -> Parser {
         Parser::new(Box::new(move
@@ -71,7 +72,7 @@ impl Parser {
                         => {input.next();},
                         _
                         => break}}
-                Ok(String::new())}))}
+                Ok(String::new())}))}/*
 
     pub fn option(p: Parser) -> Parser {
         Parser::new(Box::new(move
@@ -94,5 +95,5 @@ impl Parser {
                 Ok(s)}))}
 
     pub fn repeat1(p: Parser) -> Parser {
-        p.and(Parser::repeat(p))}
+        p.and(Parser::repeat(p))}*/
 }
