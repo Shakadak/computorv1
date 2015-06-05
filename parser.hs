@@ -6,7 +6,7 @@ import Control.Monad (void)
 import Text.Parsec (ParseError)
 import Text.Parsec.String (Parser)
 import Text.Parsec.String.Parsec (parse)
-import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option)
+import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional)
 import Control.Applicative ((<|>), (<$>), (<*>), (<*), (*>), many)
 
 regularParse :: Parser a -> String -> Either ParseError a
@@ -29,28 +29,43 @@ lexeme p = do
            spaces
            return x
 
-relatif :: Parser String
-relatif = do
-          sign <- option "" (string "-")
-          spaces
-          natural <- many1 digit
-          return (sign ++ natural)
+natural :: Parser String
+natural = many1 digit
+
+relatif :: Parser String -> Parser String
+relatif p = do
+          sign <- lexeme $ option "" (string "-")
+          num <- p
+          return (sign ++ num)
 
 decimal :: Parser String
 decimal = do
           dot <- char '.'
-          natural <- many1 digit
+          natural <- natural
           return (dot:natural)
 
-real :: Parser String
-real = do
-       x1 <- relatif
+realp :: Parser String
+realp = do
+       x1 <- natural
        x2 <- option "" decimal
        return (x1 ++ x2)
 
 power :: Parser String
 power = do
-        char '^'
-        spaces
-        natural <- many1 digit
+        lexeme $ char '^'
+        natural <- lexeme $ many1 digit
         return (natural)
+
+variable :: Parser String
+variable = do
+           lexeme $ char 'X'
+           pow <- lexeme $ option "1" power
+           return pow
+
+atom :: Parser (String, String)
+atom = do
+       lexeme $ optional (char '+')
+       coefficient <- lexeme $ relatif $ option "1" realp
+       lexeme $ optional (char '*')
+       variable <- lexeme $ option "0" variable
+       return (coefficient, variable)
