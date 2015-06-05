@@ -1,7 +1,0 @@
-[package]
-name = "computorv1"
-version = "0.1.0"
-authors = ["shakadak <nathanael.pineau@gmail.com>"]
-
-[dependencies.parser-combinators]
-parser-combinators = "0.4.0"
