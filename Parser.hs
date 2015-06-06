@@ -67,17 +67,29 @@ variable = do
            pow <- lexeme $ option "1" power
            return pow
 
+atom_zero :: Parser (String, String)
+atom_zero = do
+            coefficient <- lexeme $ relatif $ realp
+            lexeme $ optional (char '*')
+            variable <- lexeme $ option "0" variable
+            return (coefficient, variable)
+
+atom_one :: Parser (String, String)
+atom_one = do
+            coefficient <- lexeme $ relatif $ option "1" realp
+            lexeme $ optional (char '*')
+            variable <- lexeme $ variable
+            return (coefficient, variable)
+
 atom :: Parser (String, String)
 atom = do
        lexeme $ optional (char '+')
-       coefficient <- lexeme $ relatif $ option "1" realp
-       lexeme $ optional (char '*')
-       variable <- lexeme $ option "0" variable
-       return (coefficient, variable)
+       atom <- choice [atom_zero, atom_one]
+       return (atom)
 
 composite :: Parser (String, String)
 composite = do
-            lexeme $ lookAhead $ choice ((char '+'):(char '-'):[])
+            lexeme $ lookAhead $ choice [char '+', char '-']
             atom <- atom
             return atom
 
