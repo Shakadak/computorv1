@@ -52,9 +52,13 @@ show_sign n
 
 show_atom :: (Double, Int) -> String
 show_atom (coeff, 0) = show coeff
-show_atom (1, pow) = "X^" ++ show pow
-show_atom (-1, pow) = "-X^" ++ show pow
+show_atom (1, pow) = 'X':(show_pow pow)
+show_atom (-1, pow) = "-X" ++ show_pow pow
 show_atom (coeff, pow) = show coeff ++ "X^" ++ show pow
+
+show_pow :: Int -> String
+show_pow 1 = ""
+show_pow p = '^':(show p)
 
 polynomial_degree :: [(Double, Int)] -> String
 polynomial_degree [] = "Polynomial degree left undefined, although we could set it at -1 or negative infinity if you really wish so.\n"
