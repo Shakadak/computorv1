@@ -4,7 +4,7 @@ import Data.Function ((&), on)
 import Data.Ord (comparing)
 import Data.List (sortBy, groupBy, find)
 import Data.Maybe (fromMaybe)
-import Math (abs, discriminant)
+import Math (abs, discriminant, sqrt)
 
 solve_equation :: [(Double, Int)] -> String
 solve_equation xs = "Reduced form: " ++ show_polynomial xs ++ polynomial_degree xs ++ polynomial_solutions xs
@@ -30,9 +30,14 @@ degree2 ((x2, _):xs) = do
 solve_quadratic :: Double -> Double -> Double -> String
 solve_quadratic a b c
                 | delta == 0 = "One real solutions:\n" ++ show (-b / 2 * a) ++ "\n"
-                | delta > 0 = "Two real solutions:\n" ++ show (1) ++ "\n" ++ show (-1) ++ "\n"
-                | delta < 0 = "Two complex solutions:\n" ++ show (1) ++ "\n" ++ show (-1) ++ "\n"
+                | delta > 0 = "Two real solutions:\n" ++ show ((-b + Math.sqrt delta) / (2 * a)) ++ "\n" ++ show ((-b - Math.sqrt delta) / (2 * a)) ++ "\n"
+                | delta < 0 = "Two complex solutions:\n" ++ show_complex (-b / (2 * a)) ((Math.sqrt $ -delta) / (2 * a)) ++ "\n" ++ show_complex (-b / (2 * a)) (-(Math.sqrt $ -delta) / (2 * a)) ++ "\n"
                 where delta = discriminant a b c
+
+show_complex :: Double -> Double -> String
+show_complex a b
+             | b < 0 = show a ++ show b ++ "i"
+             | otherwise = show a ++ "+" ++ show b ++ "i"
 
 interpret_equation :: Either ParseError [(String, String)] -> String
 interpret_equation (Left err) = show err
