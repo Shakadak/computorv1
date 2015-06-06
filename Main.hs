@@ -6,7 +6,7 @@ import Data.List (sortBy, groupBy)
 
 interpret_equation :: Either ParseError [(String, String)] -> String
 interpret_equation (Left err) = show err
---interpret_equation (Right xs) = map convert xs & simplify & solve
+interpret_equation (Right xs) = show $ map convert xs & simplify
 
 convert :: (String, String) -> (Double, Int)
 convert (coeff, var) = (read coeff, read var)
