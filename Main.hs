@@ -2,11 +2,29 @@ import Parser
 import Text.Parsec (ParseError)
 import Data.Function ((&), on)
 import Data.Ord (comparing)
-import Data.List (sortBy, groupBy)
+import Data.List (sortBy, groupBy, find)
+import Data.Maybe (fromMaybe)
 import Math (abs)
 
 solve_equation :: [(Double, Int)] -> String
-solve_equation xs = "Reduced form: " ++ show_polynomial xs ++ polynomial_degree xs
+solve_equation xs = "Reduced form: " ++ show_polynomial xs ++ polynomial_degree xs ++ polynomial_solutions xs
+
+polynomial_solutions :: [(Double, Int)] -> String
+polynomial_solutions xs = case xs of
+                         [] -> "Infinity of solution, can't display all that.\n"
+                         ((_, 0):ys) -> "No solution for you, nothing to solve anyway.\n"
+                         ((_, 1):ys) -> "The solution is:\n" ++ degree1 xs
+                         ((_, 2):ys) -> degree2 xs
+                         _ -> "The polynomial degree is strictly greater than 2. I can't solve this. Can you ?\n"
+
+degree1 :: [(Double, Int)] -> String
+degree1 (x:[]) = "0\n"
+degree1 ((x, _):(c, _):[]) = show ((-c) / x) ++ "\n"
+
+degree2 :: [(Double, Int)] -> String
+degree2 ((x2, _):xs) = do
+                       let x1 = fst $ fromMaybe (0.0, 1) $ find (((==) `on` snd) (0, 1)) xs
+                       show x2
 
 interpret_equation :: Either ParseError [(String, String)] -> String
 interpret_equation (Left err) = show err
@@ -40,3 +58,8 @@ show_atom (coeff, pow) = show coeff ++ "X^" ++ show pow
 polynomial_degree :: [(Double, Int)] -> String
 polynomial_degree [] = "Polynomial degree left undefined, although we could set it at -1 or negative infinity if you really wish so.\n"
 polynomial_degree ((_, x):_) = "Polynomial degree: " ++ show x ++ "\n"
+
+get :: a -> Int -> [a] -> a
+get def _ [] = def
+get def 0 (x:xs) = x
+get def n (x:xs) = get def (n - 1) xs
