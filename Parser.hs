@@ -51,9 +51,9 @@ decimal = do
 
 realp :: Parser String
 realp = do
-       x1 <- natural
-       x2 <- option "" decimal
-       return (x1 ++ x2)
+        x1 <- natural
+        x2 <- option "" decimal
+        return (x1 ++ x2)
 
 power :: Parser String
 power = do
@@ -70,21 +70,26 @@ variable = do
 atom_zero :: Parser (String, String)
 atom_zero = do
             coefficient <- lexeme $ relatif $ realp
-            lexeme $ optional (char '*')
             variable <- lexeme $ option "0" variable
             return (coefficient, variable)
 
 atom_one :: Parser (String, String)
 atom_one = do
-            coefficient <- lexeme $ relatif $ option "1" realp
-            lexeme $ optional (char '*')
-            variable <- lexeme $ variable
-            return (coefficient, variable)
+           coefficient <- lexeme $ relatif $ option "1" realp
+           variable <- lexeme $ variable
+           return (coefficient, variable)
+
+atom_general :: Parser (String, String)
+atom_general = do
+               coefficient <- lexeme $ relatif $ realp
+               lexeme $ optional (char '*')
+               variable <- lexeme $ variable
+               return (coefficient, variable)
 
 atom :: Parser (String, String)
 atom = do
        lexeme $ optional (char '+')
-       atom <- choice [atom_zero, atom_one]
+       atom <- try atom_zero <|> atom_one <|> atom_general
        return (atom)
 
 composite :: Parser (String, String)
