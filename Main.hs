@@ -24,7 +24,8 @@ degree1 ((x, _):(c, _):[]) = show ((-c) / x) ++ "\n"
 degree2 :: [(Double, Int)] -> String
 degree2 ((x2, _):xs) = do
                        let x1 = fst $ fromMaybe (0.0, 1) $ find (((==) `on` snd) (0, 1)) xs
-                       show x2
+                       let x0 = fst $ fromMaybe (0.0, 1) $ find (((==) `on` snd) (0, 0)) xs
+                       show x2 ++ "|" ++ show x1 ++ "|" ++ show x0
 
 interpret_equation :: Either ParseError [(String, String)] -> String
 interpret_equation (Left err) = show err
