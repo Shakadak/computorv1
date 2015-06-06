@@ -78,6 +78,20 @@ composite = do
 
 polynomial :: Parser [(String, String)]
 polynomial = do
-             atom <- atom
-             composites <- many $ composite
+             atom <- lexeme $ atom
+             composites <- lexeme $ many $ composite
              return (atom : composites)
+
+equation :: Parser [(String, String)]
+equation = do
+           poly <- lexeme $ polynomial
+           lexeme $ char '='
+           antipoly <- lexeme $ polynomial
+           return (poly ++ (negate_polynomial antipoly))
+
+negate_polynomial :: [(String, String)] -> [(String, String)]
+negate_polynomial = map negate_atom
+
+negate_atom :: (String, String) -> (String, String)
+negate_atom ('-':xs, var) = (xs, var)
+negate_atom (coeff, var) = ('-':coeff, var)
