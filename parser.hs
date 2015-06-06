@@ -6,7 +6,7 @@ import Control.Monad (void)
 import Text.Parsec (ParseError)
 import Text.Parsec.String (Parser)
 import Text.Parsec.String.Parsec (parse)
-import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional)
+import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional, choice, lookAhead)
 import Control.Applicative ((<|>), (<$>), (<*>), (<*), (*>), many)
 
 regularParse :: Parser a -> String -> Either ParseError a
@@ -69,3 +69,15 @@ atom = do
        lexeme $ optional (char '*')
        variable <- lexeme $ option "0" variable
        return (coefficient, variable)
+
+composite :: Parser (String, String)
+composite = do
+            lexeme $ lookAhead $ choice ((char '+'):(char '-'):[])
+            atom <- atom
+            return atom
+
+polynomial :: Parser [(String, String)]
+polynomial = do
+             atom <- atom
+             composites <- many $ composite
+             return (atom : composites)
