@@ -12,7 +12,9 @@ convert :: (String, String) -> (Double, Int)
 convert (coeff, var) = (read coeff, read var)
 
 simplify :: [(Double, Int)] -> [(Double, Int)]
-simplify x = x & sortBy (flip $ comparing snd) & groupBy ((==) `on` snd) & map (foldl1 add_atom)
+simplify x = x & sortBy (flip $ comparing snd) & groupBy ((==) `on` snd) & map (foldl1 add_atom) & filter (((/=) `on` fst) (0.0, 1))
 
 add_atom :: (Double, Int) -> (Double, Int) -> (Double, Int)
 add_atom (x, z) (y, _) = (x + y, z)
+
+-- show_polynomial
