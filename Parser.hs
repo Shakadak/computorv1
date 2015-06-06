@@ -1,3 +1,5 @@
+module Parser where
+
 import Text.Parsec (ParseError)
 import Text.Parsec.String (Parser)
 import Text.Parsec.String.Parsec (try)
@@ -8,6 +10,9 @@ import Text.Parsec.String (Parser)
 import Text.Parsec.String.Parsec (parse)
 import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional, choice, lookAhead)
 import Control.Applicative ((<|>), (<$>), (<*>), (<*), (*>), many)
+
+parse_equation :: String -> Either ParseError [(String, String)]
+parse_equation = parseWithWSEof equation
 
 regularParse :: Parser a -> String -> Either ParseError a
 regularParse p = parse p ""
