@@ -2,9 +2,17 @@ import Parser
 import Text.Parsec (ParseError)
 import Data.Function ((&), on)
 import Data.Ord (comparing)
-import Data.List (sortBy, groupBy, find)
+import Data.List (sortBy, groupBy, find, length)
 import Data.Maybe (fromMaybe)
 import Math (abs, discriminant, sqrt)
+import System.Environment (getArgs)
+
+main :: IO ()
+main = do
+       arg <- getArgs
+       case length arg of
+                  1 -> putStrLn $ (parse_equation $ head arg) & interpret_equation
+                  _ -> putStrLn "Usage: ./computor \"polynomial\"\n"
 
 solve_equation :: [(Double, Int)] -> String
 solve_equation xs = "Reduced form: " ++ show_polynomial xs ++ polynomial_degree xs ++ polynomial_solutions xs
