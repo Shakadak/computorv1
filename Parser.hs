@@ -70,12 +70,14 @@ variable = do
 atom_zero :: Parser (String, String)
 atom_zero = do
             coefficient <- lexeme $ relatif $ realp
+            lexeme $ optional (char '*')
             variable <- lexeme $ option "0" variable
             return (coefficient, variable)
 
 atom_one :: Parser (String, String)
 atom_one = do
            coefficient <- lexeme $ relatif $ option "1" realp
+           lexeme $ optional (char '*')
            variable <- lexeme $ variable
            return (coefficient, variable)
 
@@ -89,7 +91,7 @@ atom_general = do
 atom :: Parser (String, String)
 atom = do
        lexeme $ optional (char '+')
-       atom <- try atom_zero <|> atom_one <|> atom_general
+       atom <- (try atom_zero) <|> (try atom_one) <|> atom_general
        return (atom)
 
 composite :: Parser (String, String)

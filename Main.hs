@@ -11,8 +11,8 @@ main :: IO ()
 main = do
        arg <- getArgs
        case length arg of
-                  1 -> putStrLn $ (parse_equation $ head arg) & interpret_equation
-                  _ -> putStrLn "Usage: ./computor \"polynomial\"\n"
+                  1 -> putStr $ (parse_equation $ head arg) & interpret_equation
+                  _ -> putStr "Usage: ./computor \"polynomial\"\n"
 
 solve_equation :: [(Double, Int)] -> String
 solve_equation xs = "Reduced form: " ++ show_polynomial xs ++ polynomial_degree xs ++ polynomial_solutions xs
@@ -48,7 +48,7 @@ show_complex a b
              | otherwise = show a ++ "+" ++ show b ++ "i"
 
 interpret_equation :: Either ParseError [(String, String)] -> String
-interpret_equation (Left err) = show err
+interpret_equation (Left err) = show err ++ "\n"
 interpret_equation (Right xs) = map convert xs & simplify & solve_equation
 
 convert :: (String, String) -> (Double, Int)
@@ -74,7 +74,7 @@ show_atom :: (Double, Int) -> String
 show_atom (coeff, 0) = show coeff
 show_atom (1, pow) = 'X':(show_pow pow)
 show_atom (-1, pow) = "-X" ++ show_pow pow
-show_atom (coeff, pow) = show coeff ++ "X^" ++ show pow
+show_atom (coeff, pow) = show coeff ++ "X" ++ show_pow pow
 
 show_pow :: Int -> String
 show_pow 1 = ""

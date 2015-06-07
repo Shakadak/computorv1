@@ -9,17 +9,12 @@ SRC := Main.hs \
        $(PARSEC)Combinator.hs \
        $(PARSEC)Parsec.hs
 
-OBJ := $(SRC:.hs=.o)
 
-INTERFACE := $(SRC:.hs=.hi)
-
-all: $(NAME)
-
-$(NAME):
-	ghc --make $(SRC) -o $@
+$(NAME): $(SRC)
+	ghc --make $(SRC) -o $@ -outputdir trash
 
 clean:
-	rm -f $(OBJ) $(INTERFACE)
+	rm -rf trash
 
 fclean: clean
 	rm -f $(NAME)
