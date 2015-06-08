@@ -8,7 +8,7 @@ import Control.Monad (void)
 import Text.Parsec (ParseError)
 import Text.Parsec.String (Parser)
 import Text.Parsec.String.Parsec (parse)
-import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional, choice, lookAhead)
+import Text.Parsec.String.Combinator (many1, eof, manyTill, anyToken, option, optional, choice, lookAhead, notFollowedBy)
 import Control.Applicative ((<|>), (<$>), (<*>), (<*), (*>), many)
 
 parse_equation :: String -> Either ParseError [(String, String)]
@@ -70,14 +70,14 @@ variable = do
 atom_zero :: Parser (String, String)
 atom_zero = do
             coefficient <- lexeme $ relatif $ realp
-            lexeme $ optional (char '*')
-            variable <- lexeme $ option "0" variable
-            return (coefficient, variable)
+            notFollowedBy (do
+                           lexeme $ optional (char '*')
+                           lexeme $ variable)
+            return (coefficient, "0")
 
 atom_one :: Parser (String, String)
 atom_one = do
            coefficient <- lexeme $ relatif $ option "1" realp
-           lexeme $ optional (char '*')
            variable <- lexeme $ variable
            return (coefficient, variable)
 
