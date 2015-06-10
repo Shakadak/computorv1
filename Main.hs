@@ -37,7 +37,7 @@ degree2 ((x2, _):xs) = do
 
 solve_quadratic :: Double -> Double -> Double -> String
 solve_quadratic a b c
-                | delta == 0 = "One real solutions:\n" ++ show (-b / 2 * a) ++ "\n"
+                | delta == 0 = "One real solutions:\n" ++ show (-b / (2 * a)) ++ "\n"
                 | delta > 0 = "Two real solutions:\n" ++ show ((-b + Math.sqrt delta) / (2 * a)) ++ "\n" ++ show ((-b - Math.sqrt delta) / (2 * a)) ++ "\n"
                 | delta < 0 = "Two complex solutions:\n" ++ show_complex (-b / (2 * a)) ((Math.sqrt $ -delta) / (2 * a)) ++ "\n" ++ show_complex (-b / (2 * a)) (-(Math.sqrt $ -delta) / (2 * a)) ++ "\n"
                 where delta = discriminant a b c
