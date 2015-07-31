@@ -36,10 +36,10 @@ degree2 ((x2, _):xs) = do
                        solve_quadratic x2 x1 x0
 
 solve_quadratic :: Double -> Double -> Double -> String
-solve_quadratic a b c
+solve_quadratic a b c -- Yuk !
                 | delta == 0 = "One real solutions:\n" ++ show (-b / (2 * a)) ++ "\n"
-                | delta > 0 = "Two real solutions:\n" ++ show ((-b + Math.sqrt delta) / (2 * a)) ++ "\n" ++ show ((-b - Math.sqrt delta) / (2 * a)) ++ "\n"
-                | delta < 0 = "Two complex solutions:\n" ++ show_complex (-b / (2 * a)) ((Math.sqrt $ -delta) / (2 * a)) ++ "\n" ++ show_complex (-b / (2 * a)) (-(Math.sqrt $ -delta) / (2 * a)) ++ "\n"
+                | delta >  0 = "Two real solutions:\n" ++ show ((-b + Math.sqrt delta) / (2 * a)) ++ "\n" ++ show ((-b - Math.sqrt delta) / (2 * a)) ++ "\n"
+                | delta <  0 = "Two complex solutions:\n" ++ show_complex (-b / (2 * a)) ((Math.sqrt $ -delta) / (2 * a)) ++ "\n" ++ show_complex (-b / (2 * a)) (-(Math.sqrt $ -delta) / (2 * a)) ++ "\n"
                 where delta = discriminant a b c
 
 show_complex :: Double -> Double -> String
@@ -67,8 +67,8 @@ show_polynomial (x:(coeff, pow):xs) = show_atom x ++ show_sign coeff ++ show_pol
 
 show_sign :: Double -> String
 show_sign n
-          | n < 0 = " - "
-          | otherwise = " + "
+    | n < 0 = " - "
+    | otherwise = " + "
 
 show_atom :: (Double, Int) -> String
 show_atom (coeff, 0) = show coeff
